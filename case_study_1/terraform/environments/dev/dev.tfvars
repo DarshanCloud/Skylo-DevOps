@@ -4,13 +4,13 @@ storage_bucket_name = "cloudengineertestdev"
 
 backend_instance_name = "backend-service-1-instance_dev"
 
-machine_type = "e2-custom-4-8192"
+machine_type = "e2-small"
 
 zone = "central1-a"
 
 network_name = "dev-network"
 
-boot_disk_image = "rhel88-avaya-cis1-base-20231118"
+boot_disk_image = "ubuntu-2004-focal"
 
 boot_disk_type = "pd-balanced"
 
