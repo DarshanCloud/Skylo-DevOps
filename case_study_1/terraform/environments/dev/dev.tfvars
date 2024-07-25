@@ -1,4 +1,4 @@
-project_id      = "cloud-engineer-dev1"
+project_id = "cloud-engineer-dev1"
 
 storage_bucket_name = "cloudengineertestdev"
 

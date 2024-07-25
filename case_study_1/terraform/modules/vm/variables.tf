@@ -11,5 +11,5 @@ variable "boot_disk_image" {}
 variable "boot_disk_type" {}
 
 variable "boot_disk_size" {
-    type = number
+  type = number
 }

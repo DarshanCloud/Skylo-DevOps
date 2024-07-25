@@ -15,7 +15,7 @@ variable "boot_disk_image" {}
 variable "boot_disk_type" {}
 
 variable "boot_disk_size" {
-    type = number
+  type = number
 }
 
 variable "backend-services-cluster" {}
@@ -23,5 +23,5 @@ variable "backend-services-cluster" {}
 variable "location" {}
 
 variable "initial_node_count" {
-    type = number
+  type = number
 }

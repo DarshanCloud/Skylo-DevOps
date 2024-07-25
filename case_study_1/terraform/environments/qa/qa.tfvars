@@ -1,4 +1,4 @@
-project_id      = "cloud-engineer-qa1"
+project_id = "cloud-engineer-qa1"
 
 storage_bucket_name = "cloudengineertestqa"
 
@@ -16,7 +16,7 @@ boot_disk_type = "pd-balanced"
 
 boot_disk_size = 100
 
-backend-services-cluster = "backend-services-cluster-dev"
+backend-services-cluster = "backend-services-cluster-qa"
 
 location = "us-central1"
 
