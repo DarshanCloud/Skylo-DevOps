@@ -1,0 +1,100 @@
+substitutions:
+  _TERRAFORM_VERSION: "hashicorp/terraform:1.5.0"
+  _INFRA_ENV: "dev"
+  _INFRA_REGION: "us-central1"
+  _TERRA_FORM_ENV_PATH: "case_study_1/terraform/environments" 
+  _TERRA_FORM_BACKEND_PATH: "backend"
+  _APPLY: "no"
+  _DESTROY: "no"
+  _FORCE_UNLOCAK: "no"
+  _RECONFIG: "no"
+  _MIGRATE_STATE: "no"
+
+steps:
+- id: Checkout From Github
+  name: ${_TERRAFORM_VERSION}
+  entrypoint: sh
+  args:
+    - -c
+    - |
+      set -euo pipefail
+
+      cd ${_TERRA_FORM_ENV_PATH}/${_INFRA_ENV}
+      pwd && ls -la
+
+      if [[ "${_FORCE_UNLOCAK}" == "yes" ]]
+      then
+      terraform force-unlock
+      fi
+
+- id: Terraform init
+  name: ${_TERRAFORM_VERSION}
+  entrypoint: sh
+  args:
+    - -c
+    - |
+      set -euo pipefail
+
+      cd ${_TERRA_FORM_ENV_PATH}/${_INFRA_ENV}
+      pwd && ls -la
+
+      if [[ "${_RECONFIG}" == "yes" ]]
+      then
+      terraform init -reconfigure
+      fi
+
+      if [[ "${_MIGRATE_STATE}" == "yes" ]]
+      then
+      terraform init -migrate-state
+      fi
+
+      if [[ "${_MIGRATE_STATE}" != "yes" && "${_RECONFIG}"  != "yes" ]]
+      then
+      terraform init
+      fi
+
+- id: Terraform Plan
+  name: ${_TERRAFORM_VERSION}
+  entrypoint: sh
+  args:
+    - -c
+    - |
+      set -euo pipefail
+
+      cd ${_TERRA_FORM_ENV_PATH}/${_INFRA_ENV}
+      pwd && ls -la
+      terraform plan --var-file=${_INFRA_ENV}.tfvars -out=output.tfplan
+
+- id: Terraform Apply
+  name: ${_TERRAFORM_VERSION}
+  entrypoint: sh
+  args:
+    - -c
+    - |
+      set -euo pipefail
+      
+      cd ${_TERRA_FORM_ENV_PATH}/${_INFRA_ENV}
+      pwd && ls -la
+      if [[ "${_APPLY}" == "yes" ]]
+      then
+        terraform apply -auto-approve output.tfplan 
+      fi
+- id: Terraform Destroy
+  name: ${_TERRAFORM_VERSION}
+  entrypoint: sh
+  args:
+    - -c
+    - |
+      set -euo pipefail
+      
+      cd ${_TERRA_FORM_ENV_PATH}/${_INFRA_ENV}
+      pwd && ls -la
+      if [[ "${_DESTROY}" == "yes" ]]
+      then
+        terraform destroy --auto-approve output.tfplan
+      fi 
+      
+timeout: 10800s
+options:
+  logging: CLOUD_LOGGING_ONLY
+  substitution_option: ALLOW_LOOSE

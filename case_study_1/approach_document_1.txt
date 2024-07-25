@@ -1,0 +1,102 @@
+ Focus area
+ Cloud infra, tools and frameworks
+ 
+ Understanding
+ Consider yourself a DevOps engineer working on a project to develop a Cloud based system that
+ consists of a frontend server and many different backend components. Backend services to be hosted in
+ Cloud Platform. Let’s consider the following cloud infrastructure requirement:
+	● Backendservice-1: Due to certain technical constraints this service need to be hosted in VM
+ 	● Backend service-2: This service implements customer facing REST apis and to be hosted in the kubernetes cluster.
+ 	● 3 more backendservices are internal microservices to be hosted in the Kubernetes cluster.
+ 	● All services are developed in Java
+ 	● SQL database is used and is accessed by all services
+ 	● Scalable deployment
+
+ Ask from Candidates?
+ 	● You have been asked to provide two Environments, Develop and QA environments. Articulate
+      what level of additional details are required to set up cloud infrastructure?
+ 	● Choose the Cloud platform of your choice (GCP, AWS, Azure or any other) and list out various
+ 	  cloud components and frameworks that can be used to meet above requirements. Justify the selection.
+ 	● How would you manage scalable deployment? What are various bottlenecks in the above case for scalability?
+ 	● Write Terraform/Ansible/Helm script for resource creation?
+ 	● How do you validate the created infrastructure?
+ 	● Discuss challenges?
+
+
+To address the cloud infrastructure requirement for above requirements involving frontend and multiple backend services, below we can see structured approach focusing on the deployment of each component
+
+1. To set up Develop and QA environments, typically we need the following additional details beyond what is provided:
+
+    i.  Network Configuration: Define the network topology, including VPCs (Virtual Private Clouds), subnets, and firewall.
+
+    ii. Identity and Access Management (IAM): Define roles and permissions for accessing various cloud resources.
+
+    iii.Data Management: Specify the setup for the SQL database, including database type MySQL, replication, backups, and access controls.
+
+    iv. Monitoring and Logging: Configure monitoring tools for application and infrastructure health, and setup centralized logging.
+
+    v.  CI/CD Pipeline Integration: Detail how the CI/CD pipelines will be integrated to deploy changes to these environments.
+
+    vi. Load Balancing and CDN: Decide on load balancing configurations for frontend and backend services, and if a CDN is needed for content delivery.
+
+    vii. Backup and Disaster Recovery: Implement backup strategies for databases and critical services, and define disaster recovery plans.
+
+
+2. For above requirements, let's choose Google Cloud Platform (GCP) due to its strong Kubernetes support (Google Kubernetes Engine, GKE) and robust networking capabilities. Here are the components and frameworks that can be used:
+
+    i. Compute: Use Google Compute Engine for hosting the VM instance based on above requirements (compute power, storage, etc.). for Backendservice-1.
+       Deployment: Deploy the Java application to the VM using a configuration management tool like Ansible, Puppet, or Chef for automation and consistency.
+       Monitoring: Implement monitoring using tools like gcp monitoring, logging and DataDog to ensure health and performance.
+
+    ii.Kubernetes: Deploy Backend service-2 (customer-facing APIs). This service hosts customer-facing REST APIs and benefits from the scalability and orchestration capabilities of Kubernetes.
+        Dockerization: Containerize the Java application using Docker.
+        Kubernetes Cluster: Set up a Kubernetes cluster using Google GKE for orchestration.
+        Deployment: Deploy the Dockerized application using Kubernetes Deployments and Services.
+        Scaling: Utilize Kubernetes Horizontal Pod Autoscaler (HPA) to automatically scale based on CPU or custom metrics. Use Kubernetes Deployment resources for managing replicas, rolling updates, and scaling.
+        Ingress: Use Kubernetes Ingress to expose APIs securely.
+        Expose service endpoints using Kubernetes Services of type LoadBalancer or NodePort to make them accessible to external clients.
+        
+        And for other internal microservices (Backend service-3, Backend service-4, Backend service-5) on Google Kubernetes Engine (GKE).
+        Dockerize each Java application.
+        Deploy to the same Kubernetes cluster used for Backend Service-2,3,4 and 5.
+        Scaling: Use the scaling features provided by the managed database service, such as read replicas or auto-scaling.
+
+    iii.SQL Database: Utilize Google Cloud SQL for the SQL database, which offers managed MySQL database.
+
+    iv. Networking: Configure VPC networks, subnets, firewall rules using GCP’s networking services.
+
+    v. CI/CD: Integrate with Cloud Build for CI/CD pipelines, which can automate builds, tests, and deployments.
+
+3. For Managing Scalable Deployment and Bottlenecks.
+
+    i.  Kubernetes Autoscaling: Configure Horizontal Pod Autoscaler (HPA) in GKE to automatically scale pods based on CPU utilization or custom metrics.
+
+    ii. Compute Engine Autoscaler: For Backendservice-1, use Compute Engine managed instance groups with autoscaling based on CPU utilization or custom metrics.
+
+    iii.Database Scalability: Ensure the SQL database is properly scaled and optimized for read/write operations.
+
+    iv. Network Throughput: Monitor and optimize network throughput especially when multiple services are communicating with the SQL database.
+
+    v.  Resource Limits: Set resource limits and requests appropriately in Kubernetes to prevent resource contention and ensure smooth scalability.
+
+4. For high-level example using Terraform for creating resources on GCP:
+
+   Please see terraform directory - 
+
+5. Validating the Created Infrastructure
+
+    i.  Manual Verification: Ensure all resources (VM instance, GKE cluster, database) are provisioned and accessible.
+
+    ii. Automated Tests: Using Integrate IaC(Terraform) validation with Cloud Build - https://cloud.google.com/security-command-center/docs/iac-validation-cloud-build
+
+    iii. Security Checks: Perform security audits and vulnerability assessments on deployed resources.
+
+6. Challenges in this setup may include:
+
+    i. Integration Complexity: Coordinating communication between frontend and multiple backend services.
+
+    ii. Scalability Tuning: Fine-tuning autoscaling policies and resource limits to optimize performance.
+
+    iii. Data Consistency: Ensuring data consistency and integrity across distributed services and the SQL database.
+
+    iv. Cost Management: Monitoring and optimizing cloud costs, especially with scalable deployments.
