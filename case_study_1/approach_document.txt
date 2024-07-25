@@ -37,6 +37,10 @@ To address the cloud infrastructure requirement for above requirements involving
 
     v.  CI/CD Pipeline Integration: Detail how the CI/CD pipelines will be integrated to deploy changes to these environments.
 
+    vi. Load Balancing and CDN: Decide on load balancing configurations for frontend and backend services, and if a CDN is needed for content delivery.
+
+    vii. Backup and Disaster Recovery: Implement backup strategies for databases and critical services, and define disaster recovery plans.
+
 
 2. For above requirements, let's choose Google Cloud Platform (GCP) due to its strong Kubernetes support (Google Kubernetes Engine, GKE) and robust networking capabilities. Here are the components and frameworks that can be used:
 
@@ -48,8 +52,9 @@ To address the cloud infrastructure requirement for above requirements involving
         Dockerization: Containerize the Java application using Docker.
         Kubernetes Cluster: Set up a Kubernetes cluster using Google GKE for orchestration.
         Deployment: Deploy the Dockerized application using Kubernetes Deployments and Services.
-        Scaling: Utilize Kubernetes Horizontal Pod Autoscaler (HPA) to automatically scale based on CPU or custom metrics.
-        Ingress: Use Kubernetes Ingress to expose APIs securely. 
+        Scaling: Utilize Kubernetes Horizontal Pod Autoscaler (HPA) to automatically scale based on CPU or custom metrics. Use Kubernetes Deployment resources for managing replicas, rolling updates, and scaling.
+        Ingress: Use Kubernetes Ingress to expose APIs securely.
+        Expose service endpoints using Kubernetes Services of type LoadBalancer or NodePort to make them accessible to external clients.
         
         And for other internal microservices (Backend service-3, Backend service-4, Backend service-5) on Google Kubernetes Engine (GKE).
         Dockerize each Java application.
@@ -76,7 +81,7 @@ To address the cloud infrastructure requirement for above requirements involving
 
 4. For high-level example using Terraform for creating resources on GCP:
 
-   Please see terraform.tf
+   Please see terraform directory - 
 
 5. Validating the Created Infrastructure
 
