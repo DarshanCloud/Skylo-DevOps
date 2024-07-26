@@ -37,7 +37,7 @@ To address the cloud infrastructure requirement for above requirements involving
 
     v.  CI/CD Pipeline Integration: Detail how the CI/CD pipelines will be integrated to deploy changes to these environments.
 
-    vi. Load Balancing and CDN: Decide on load balancing configurations for frontend and backend services, and if a CDN is needed for content delivery.
+    vi. Load Balancing and CDN: Decide on load balancing configurations for frontend and backend services, and if a CDN is needed for content delivery and cloud armor rules to block vulnerabilities.
 
     vii. Backup and Disaster Recovery: Implement backup strategies for databases and critical services, and define disaster recovery plans.
 
@@ -48,7 +48,7 @@ To address the cloud infrastructure requirement for above requirements involving
        Deployment: Deploy the Java application to the VM using a configuration management tool like Ansible, Puppet, or Chef for automation and consistency.
        Monitoring: Implement monitoring using tools like gcp monitoring, logging and DataDog to ensure health and performance.
 
-    ii.Kubernetes: Deploy Backend service-2 (customer-facing APIs). This service hosts customer-facing REST APIs and benefits from the scalability and orchestration capabilities of Kubernetes.
+    ii. Kubernetes: Deploy Backend service-2 (customer-facing APIs). This service hosts customer-facing REST APIs and benefits from the scalability and orchestration capabilities of Kubernetes.
         Dockerization: Containerize the Java application using Docker.
         Kubernetes Cluster: Set up a Kubernetes cluster using Google GKE for orchestration.
         Deployment: Deploy the Dockerized application using Kubernetes Deployments and Services.
