@@ -1,0 +1,123 @@
+Homework Case study- 2
+ Focus area
+ CI/CD, tools and frameworks
+
+ Understanding
+ Consider yourself a DevOps engineer working on a project to develop a Cloud based system that
+ consists of a frontend server and many different backend components. Backend services to be hosted in
+ Cloud Platform. Let’s consider the following cloud infrastructure requirement:
+ 	● Backendservice-1: Due to certain technical constraints this service need to be hosted in VM
+ 	● Backend service-2: this service implements customer facing REST apis and to be hosted in the kubernetes cluster.
+ 	● 3morebackendservices are internal microservices to be hosted in the Kubernetes cluster.
+ 	● Allservices are developed in Java
+ 	● SQLdatabase is used and is accessed by all services
+ 	● Scalable deployment
+
+ Ask from Candidates?
+ 	● Assume that Cloud infrastructure is created and available for hosting all services
+ 	● You have been asked to create a CI/CD pipeline for the project. Articulate what level of additional
+      details are required for your work?
+ 	● List out various tools and frameworks that can be used for each part of the CI/CD. Justify the selection.
+ 	● Define various pipeline stages and how would you implement it?
+ 	● How the CI/CD can be managed for multiple environment (develop, QA and Production)
+ 	● Prepare a sample Jenkin file with all step and comments
+ 	● Discuss challenges?
+
+
+1. Before designing the CI/CD pipeline, we need additional details:
+
+    i.  Source Code Repository: Which version control system (e.g., GitHub, GitLab, Bitbucket) is used?
+
+    ii. Build Process: What build tool is used for Java applications? (e.g., Maven, Gradle).
+
+    iii.Test Suite: Types of tests are required? (unit tests, integration tests, end-to-end tests), specific testing frameworks or tools? (e.g., JUnit).
+
+    iv. Deployment Strategy: Deployment be handled for each service? (e.g., rolling updates, blue-green deployments).
+
+    v.  Infrastructure Details: Cloud provider is used? (e.g., AWS, GCP, Azure) - here lets use GCP.
+
+    vi. Monitoring and Logging: Implement monitoring using tools like gcp monitoring, logging and DataDog to ensure health and performance.
+
+    vii.Rollback Strategy: Rollback strategy in case of a failed deployment?
+
+
+2. Tools and Frameworks that can be used for each part of the CI/CD.
+
+    i. Git: GitHub for version control.
+
+    ii. Build and Test: Maven or Gradle for build and JUnit for unit testing, Mockito for mocking, and Cucumber for end-to-end testing.
+
+    iii. Continuous Integration/Continuous Deployment (CI/CD) Tools:
+         - CI/CD Platform: Jenkins.
+         - Docker: For containerizing applications.
+         - Kubernetes: For deploying frontend and backend services.
+         - Secrets Management: Cloud Secret manager.
+         - Terraform: For infrastructure as code (IaC) and provisioning.
+         - Configuration Management: ConfigMaps and Secrets in Kubernetes for application configuration.
+
+3. Various pipeline stages 
+
+    i. Source Code Checkout: Checkout the latest code from the repository.
+
+    ii.Build: Compile the code using Maven or Gradle and Package the application (e.g., JAR files).
+
+    iii. Test: Execute unit tests, integration tests, and other tests.
+
+    iv. Build Docker Images: Build Docker images for each service and Tag images with version numbers.
+
+    v. Push Docker Images: Push Docker images to a container registry to gcp container registry.
+
+    vi. Deploy to Develop: Deploy the services to a Develop environment in Kubernetes and VM.
+
+    vii. Deploy to QA: Deploy the services to a QA environment in Kubernetes and VM.
+
+    viii.Approval/Manual Testing: Manual testing or QA approval process.
+
+    ix. Deploy to Production: Deploy to the production environment in Kubernetes and VM.
+
+    x. Monitoring: Ensure monitoring and logging are set up for the deployed services.
+
+    xi. Cleanup/Artifacts Management: Clean up old Docker images and artifacts if necessary.
+
+4. Managing CI/CD for Multiple Environments
+
+    i. Environment-specific Configurations:
+       - Use environment-specific configuration files or environment variables.
+       - Use Kubernetes namespaces or different clusters for environments.
+
+    ii.Branching Strategy:
+       - Implement a branching strategy (e.g., Git Flow) where `main` or `master` branch is used for production, `dev` branch for development, and QA branche for QA environment.
+
+    iii. Pipeline Configuration:
+         - Define different pipeline stages or jobs for different environments.
+         - Use conditionals or parameters in the pipeline to handle environment-specific deployments.
+
+    iv. Environment Variables:
+         - Use environment variables or parameterized builds to manage configurations for different environments.
+
+5. Sample Jenkin file available inside case_study_2 directory
+
+6. Challenges
+
+    i. Complexity in Multi-Environment Setup:
+       - Managing configurations and deployments across multiple environments can be complex. Use environment-specific configurations and automation to manage this complexity.
+
+    ii. Integration Issues:
+       - Ensuring smooth integration between different tools (e.g., CI/CD, Docker, Kubernetes) can be challenging. Proper testing and validation are crucial.
+
+    iii. Resource Management:
+       - Efficiently managing resources, especially with Docker and Kubernetes, requires careful planning to avoid bottlenecks and ensure scalability.
+
+    iv. Security Concerns:
+       - Managing secrets and ensuring security across the pipeline is critical. Use robust secrets management solutions and follow security best practices.
+
+    vi. Rollback Strategy:
+       - Implementing effective rollback strategies for both Kubernetes deployments and VM-based services is essential to handle failures gracefully.
+
+    vi. Monitoring and Debugging:
+        - Ensuring proper monitoring and logging to troubleshoot issues in the pipeline or deployed services can be challenging.
+
+
+
+
+

@@ -1,0 +1,94 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_IMAGE = "my-app-image"
+        REGISTRY = "my-docker-registry"
+        BRANCH_NAME = "${env.BRANCH_NAME}"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git '<repo-link>'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build("${DOCKER_IMAGE}:${env.BUILD_ID}")
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry('https://my-docker-registry', 'docker-credentials-id') {
+                        docker.image("${DOCKER_IMAGE}:${env.BUILD_ID}").push('latest')
+                        docker.image("${DOCKER_IMAGE}:${env.BUILD_ID}").push("${env.BUILD_ID}")
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Developoment environment') {
+            when {
+                branch 'dev'
+            }
+            steps {
+                script {
+                    // Deployment script or Helm chart deployment command
+                    sh 'kubectl apply -f k8s/staging-deployment.yaml'
+                }
+            }
+        }
+
+   stage('Deploy to QA environment') {
+            when {
+                branch 'qa'
+            }
+            steps {
+                script {
+                    // Deployment script or Helm chart deployment command
+                    sh 'kubectl apply -f k8s/staging-deployment.yaml'
+                }
+            }
+        }
+
+        stage('Deploy to Production') {
+            when {
+                branch 'main'
+            }
+            steps {
+                input message: 'Approve Deployment to Production?', ok: 'Deploy'
+                script {
+                    // Deployment script or Helm chart deployment command
+                    sh 'kubectl apply -f k8s/production-deployment.yaml'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed.'
+        }
+    }
+}
